@@ -5,7 +5,9 @@ const bcrypt = require('bcryptjs')
 module.exports = {
   async findAll(req, res) {
     try {
-      const accounts = await Account.findAll()
+      const accounts = await Account.findAll({
+        attributes: ['id', 'username', 'email']
+      })
       res.status(200).send({
         status: true,
         message: 'Success get all account',
@@ -25,10 +27,11 @@ module.exports = {
       const id = req.params.id
       const account = await Account.findByPk(id)
       if (account) {
+        delete account.dataValues['password']
         res.status(200).send({
           status: true,
           message: 'Success get account',
-          results: account
+          results: account.dataValues
         })
       } else {
         res.status(404).send({

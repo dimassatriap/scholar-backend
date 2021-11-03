@@ -19,10 +19,11 @@ module.exports = {
             }).then((accountData) => {
                 if (!accountData) {
                     Account.create(body).then((data) => {
+                        delete data.dataValues['password']
                         res.status(200).send({
                             status: true,
                             messages: "Success",
-                            results: data
+                            results: data.dataValues
                         })
                     }).catch((error) => {
                         res.status(500).send({
