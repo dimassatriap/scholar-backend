@@ -64,12 +64,7 @@ module.exports = {
       }
       else if (account) {
         const body = {
-          name: req.body.name,
-          email: req.body.email,
-          phone: req.body.phone,
-          address: req.body.address,
-          gender: req.body.gender,
-          accountId: id
+          ...req.body
         }
         const scholar = await Scholar.create(body)
         res.status(200).send({
