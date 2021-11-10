@@ -10,13 +10,13 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        message: 'Success get all account',
+        message: 'Sukses dapatkan semua akun.',
         results: accounts
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occured while retrieving Account',
+        message: 'Beberapa kesalahan terjadi saat mengambil Akun.',
         results: error
       })
     }
@@ -30,20 +30,20 @@ module.exports = {
         delete account.dataValues['password']
         res.status(200).send({
           status: true,
-          message: 'Success get account',
+          message: 'Berhasil mendapatkan akun.',
           results: account.dataValues
         })
       } else {
         res.status(404).send({
           status: false,
-          message: 'Account not found',
+          message: 'Akun tidak ditemukan.',
           results: null
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while retrieving Account',
+        message: 'Beberapa kesalahan terjadi saat mengambil Akun.',
         results: error
       })
     }
@@ -59,13 +59,13 @@ module.exports = {
       const account = await Account.create(body)
       res.status(200).send({
         status: true,
-        message: 'Success create account',
+        message: 'Sukses buat akun.',
         results: account
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while create Account',
+        message: 'Beberapa kesalahan terjadi saat membuat Akun.',
         results: error
       })
     }
@@ -99,28 +99,28 @@ module.exports = {
           } else {
             res.status(400).send({
               status: false,
-              messages: 'Username already exist',
+              messages: 'Username sudah ada.',
               results: null
             })
           }
         } else {
           res.status(404).send({
             status: false,
-            message: 'Account not found',
+            message: 'Akun tidak ditemukan.',
             results: null
           })
         }
       } catch (error) {
         res.status(500).send({
           status: false,
-          message: 'Some error occurred while update Account',
+          message: 'Beberapa kesalahan terjadi saat memperbarui Akun.',
           results: error
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while update Account',
+        message: 'Beberapa kesalahan terjadi saat memperbarui Akun.',
         results: error
       })
     }
@@ -136,13 +136,13 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        message: `${account} account deleted`,
+        message: `${account} akun dihapus.`,
         results: null
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while delete Account',
+        message: 'Beberapa kesalahan terjadi saat menghapus Akun',
         results: error
       })
     }

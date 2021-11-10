@@ -35,7 +35,7 @@ module.exports = {
                 } else {
                     res.status(400).send( {
                         status: false,
-                        messages: 'Username already exist',
+                        messages: 'Username sudah ada',
                         results: null
                     }
                     );
@@ -56,14 +56,15 @@ module.exports = {
         const account = await Account.findOne({
             where: {
                 username: req.body.username
-            }
+            },
+            attributes: ['createdAt', 'id', 'email', 'username', 'updatedAt']
         })
         if (account) {
             const password = await bcrypt.compare(req.body.password, account.password);
             if (!password) {
                 return res.status(400).send({
                     status: false,
-                    messages: 'Invalid password'
+                    messages: 'Kata sandi salah.'
                 });
             }
             const token = jwt.sign({id:account.id}, process.env.TOKEN_SECRET);
@@ -71,7 +72,7 @@ module.exports = {
         } else {
             return res.status(400).send({
                 status: false,
-                messages: 'Username is not found'
+                messages: 'Username tidak ditemukan.'
             });
         }
     }
