@@ -9,13 +9,13 @@ module.exports = {
       const scholars = await Scholar.findAll()
       res.status(200).send({
         status: true,
-        message: 'Success get all scholar',
+        messages: 'Success get all scholar',
         results: scholars
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occured while retrieving Scholar',
+        messages: 'Some error occured while retrieving Scholar',
         results: error
       })
     }
@@ -28,20 +28,20 @@ module.exports = {
       if (scholar) {
         res.status(200).send({
           status: true,
-          message: 'Success get scholar',
+          messages: 'Success get scholar',
           results: scholar
         })
       } else {
         res.status(404).send({
           status: false,
-          message: 'Scholar not found',
+          messages: 'Scholar not found',
           results: null
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while retrieving Scholar',
+        messages: 'Some error occurred while retrieving Scholar',
         results: error
       })
     }
@@ -58,7 +58,7 @@ module.exports = {
       if (account && account.dataValues.scholar !== null) {
         res.status(404).send({
           status: false,
-          message: 'Account already register scholar',
+          messages: 'Account already register scholar',
           results: null
         })
       }
@@ -69,20 +69,20 @@ module.exports = {
         const scholar = await Scholar.create(body)
         res.status(200).send({
           status: true,
-          message: 'Success create scholar',
+          messages: 'Success create scholar',
           results: scholar
         })
       } else {
         res.status(404).send({
           status: false,
-          message: 'Account not found',
+          messages: 'Account not found',
           results: null
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while create Scholar',
+        messages: 'Some error occurred while create Scholar',
         results: error
       })
     }
@@ -106,13 +106,13 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        message: 'Success update scholar',
+        messages: 'Success update scholar',
         results: scholar
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while update Scholar',
+        messages: 'Some error occurred while update Scholar',
         results: error
       })
     }
@@ -128,13 +128,13 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        message: `${scholar} scholar deleted`,
+        messages: `${scholar} scholar deleted`,
         results: null
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        message: 'Some error occurred while delete Scholar',
+        messages: 'Some error occurred while delete Scholar',
         results: error
       })
     }

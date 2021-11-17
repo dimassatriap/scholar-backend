@@ -15,7 +15,7 @@ module.exports = {
       res.status(500).send({
         is_success: false,
         status: "error",
-        message: "Some error occured while retrieving loans",
+        messages: "Some error occured while retrieving loans",
         data: error
       })
     }
@@ -39,14 +39,14 @@ module.exports = {
         res.status(404).send({
           is_success: false,
           status: "Error",
-          message: "Loans not found"
+          messages: "Loans not found"
         });
       }
     } catch (error) {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while retrieving loans",
+        messages: "Some error occurred while retrieving loans",
         data: error
       })
     }
@@ -75,7 +75,7 @@ module.exports = {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while create loans",
+        messages: "Some error occurred while create loans",
         data: error
       })
     }
@@ -115,14 +115,14 @@ module.exports = {
         res.status(404).send({
           is_success: false,
           status: "Error",
-          message: "Loans not found"
+          messages: "Loans not found"
         });
       }
     } catch (error) {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while update loans",
+        messages: "Some error occurred while update loans",
         data: error
       });
     }
@@ -138,12 +138,12 @@ module.exports = {
       });
       res.status(200).send({
         status: "Success",
-        message: `${loan} loan deleted`
+        messages: `${loan} loan deleted`
       })
     } catch (error) {
       res.status(500).send({
         status: "Error",
-        message: "Some error occurred while delete loan",
+        messages: "Some error occurred while delete loan",
         data: error
       });
     }

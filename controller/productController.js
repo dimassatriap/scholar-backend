@@ -13,7 +13,7 @@ module.exports = {
     } catch(error){
       res.status(500).send({
         status: "error",
-        message: "Some error occured while retrieving Product",
+        messages: "Some error occured while retrieving Product",
         data: error
       })
     }
@@ -31,13 +31,13 @@ module.exports = {
       } else {
         res.status(404).send({
           status: "Success",
-          message: "Product not found"
+          messages: "Product not found"
         });
       }
     } catch (error) {
       res.status(500).send({
         status: "Error",
-        message: "Some error occurred while retrieving product",
+        messages: "Some error occurred while retrieving product",
         data: error
       })
     }
@@ -64,7 +64,7 @@ module.exports = {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while create product",
+        messages: "Some error occurred while create product",
         data: error
       })
     }
@@ -96,7 +96,7 @@ module.exports = {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while update product",
+        messages: "Some error occurred while update product",
         data: error
       });
     }
@@ -113,13 +113,13 @@ module.exports = {
       res.status(200).send({
         is_success: true,
         status: "Success",
-        message: `${product} product deleted`
+        messages: `${product} product deleted`
       })
     } catch (error) {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while delete product",
+        messages: "Some error occurred while delete product",
         data: error
       });
     }
@@ -142,7 +142,7 @@ module.exports = {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while retrieving User",
+        messages: "Some error occurred while retrieving User",
         data: error
       })
     }
@@ -164,13 +164,13 @@ module.exports = {
   //     } else {
   //       res.status(404).send({
   //         status: "Success",
-  //         message: "product loan product not found"
+  //         messages: "product loan product not found"
   //       });
   //     }
   //   } catch (error){
   //       res.status(500).send({
   //         status: "Error",
-  //         message: "Some error occurred while retrieving product loan",
+  //         messages: "Some error occurred while retrieving product loan",
   //         data: error
   //       })
   //   }

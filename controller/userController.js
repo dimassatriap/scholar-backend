@@ -14,7 +14,7 @@ module.exports = {
     } catch(error){
       res.status(500).send({
         status: "error",
-        message: "Some error occured while retrieving User",
+        messages: "Some error occured while retrieving User",
         data: error
       })
     }
@@ -34,14 +34,14 @@ module.exports = {
         res.status(404).send({
           is_success: false,
           status: "Success",
-          message: "User not found"
+          messages: "User not found"
         });
       }
     } catch (error) {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while retrieving User",
+        messages: "Some error occurred while retrieving User",
         data: error
       })
     }
@@ -68,7 +68,7 @@ module.exports = {
     } catch(error) {
       res.status(500).send({
         status: "Error",
-        message: "Some error occurred while create User",
+        messages: "Some error occurred while create User",
         data: error
       })
     }
@@ -100,7 +100,7 @@ module.exports = {
     } catch (error) {
       res.status(500).send({
         status: "Error",
-        message: "Some error occurred while update User",
+        messages: "Some error occurred while update User",
         data: error
       });
     }
@@ -116,12 +116,12 @@ module.exports = {
       });
       res.status(200).send({
         status: "Success",
-        message: `${user} user deleted`
+        messages: `${user} user deleted`
       })
     } catch (error) {
       res.status(500).send({
         status: "Error",
-        message: "Some error occurred while delete User",
+        messages: "Some error occurred while delete User",
         data: error
       });
     }
@@ -148,14 +148,14 @@ module.exports = {
         res.status(404).send({
           is_success: false,
           status: "Success",
-          message: "user product not found"
+          messages: "user product not found"
         });
       }
     } catch (error) {
       res.status(500).send({
         is_success: false,
         status: "Error",
-        message: "Some error occurred while retrieving User",
+        messages: "Some error occurred while retrieving User",
         data: error
       })
     }
@@ -205,14 +205,14 @@ module.exports = {
         res.status(404).send({
           is_success: false,
           status: "Success",
-          message: "user loans product not found"
+          messages: "user loans product not found"
         });
       }
     } catch (error){
         res.status(500).send({
           is_success: false,
           status: "Error",
-          message: "Some error occurred while retrieving user's loan",
+          messages: "Some error occurred while retrieving user's loan",
           data: error
         })
     }

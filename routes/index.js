@@ -36,7 +36,7 @@ module.exports = (app) => {
   // Find One Scholar
   app.get("/scholar/:id", scholar.findOne);
 
-  //Create User
+  //Create Scholar
   app.post("/scholar", scholar.create);
 
   //Update Scholar
