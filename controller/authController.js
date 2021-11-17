@@ -59,7 +59,12 @@ module.exports = {
     const account = await Account.findOne({
       where: {
         username: req.body.username
-      }
+      },
+      include: [
+        {
+          model: db.scholars
+        }
+      ]
     })
     if (account) {
       const password = await bcrypt.compare(req.body.password, account.password)

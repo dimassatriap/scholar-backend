@@ -75,7 +75,7 @@ module.exports = {
       } else {
         res.status(404).send({
           status: false,
-          messages: 'Account not found',
+          messages: 'Akun tidak ditemukan',
           results: null
         })
       }
