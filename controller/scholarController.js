@@ -96,14 +96,17 @@ module.exports = {
         email: req.body.email,
         phone: req.body.phone,
         address: req.body.address,
-        gender: req.body.gender
+        gender: req.body.gender,
+        birthDate: req.body.birthDate
       }
 
-      const scholar = await Scholar.update(body, {
+      const scholarUpdated = await Scholar.update(body, {
         where: {
           id: id
         }
       })
+      const scholar = await Scholar.findByPk(id)
+
       res.status(200).send({
         status: true,
         messages: 'Success update scholar',
