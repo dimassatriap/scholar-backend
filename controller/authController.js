@@ -24,7 +24,7 @@ module.exports = {
                 delete data.dataValues['password']
                 res.status(200).send({
                   status: true,
-                  messages: 'Success',
+                  messages: 'Berhasil mendaftarkan akun.',
                   results: data.dataValues
                 })
               })

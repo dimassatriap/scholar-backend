@@ -74,7 +74,7 @@ module.exports = {
   async update(req, res) {
     const hasedPassword = await bcrypt.hashSync(req.body.password)
     try {
-      const id = req.params.id
+      const id = parseInt(req.params.id)
       const body = {
         username: req.body.username,
         email: req.body.email,
@@ -85,7 +85,7 @@ module.exports = {
         const account = await Account.findByPk(id)
         if (account) {
           const account = await Account.findOne({ where: { username: req.body.username } })
-          if (!account) {
+          if (!account || (account.username === body.username && account.id === id)) {
             const account = await Account.update(body, {
               where: {
                 id: id
@@ -136,7 +136,7 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        messages: `${account} akun dihapus.`,
+        messages: `akun berhasil dihapus.`,
         results: null
       })
     } catch (error) {

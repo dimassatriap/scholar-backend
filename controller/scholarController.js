@@ -131,7 +131,7 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        messages: `${scholar} scholar deleted`,
+        messages: `Scholar berhasil dihapus.`,
         results: null
       })
     } catch (error) {
