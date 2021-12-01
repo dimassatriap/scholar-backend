@@ -44,6 +44,9 @@ module.exports = (app) => {
 
   //Update Scholar
   app.put("/scholar/:id", scholar.update);
+  
+  //Delete Scholar
+  app.delete("/scholar/:id", scholar.delete);
 
 
   // Customer
