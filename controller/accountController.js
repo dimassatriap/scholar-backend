@@ -6,7 +6,7 @@ module.exports = {
   async findAll(req, res) {
     try {
       const accounts = await Account.findAll({
-        attributes: ['id', 'username', 'email']
+        attributes: ['id', 'username', 'email', 'createdAt', 'updatedAt']
       })
       res.status(200).send({
         status: true,
