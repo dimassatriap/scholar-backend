@@ -93,7 +93,7 @@ module.exports = {
             })
             res.status(200).send({
               status: true,
-              messages: 'Success update account',
+              messages: 'Berhasil mengubah akun.',
               results: account
             })
           } else {

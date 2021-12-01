@@ -25,8 +25,11 @@ module.exports = (app) => {
   // Find One Account
   app.get("/account/:id", account.findOne);
 
-  //Update User
+  //Update Account
   app.put("/account/:id", account.update);
+
+  //Delete Account
+  app.delete("/account/:id", account.delete);
 
 
   // MODEL: SCHOLARS
