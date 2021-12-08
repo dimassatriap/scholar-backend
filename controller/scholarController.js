@@ -58,7 +58,7 @@ module.exports = {
       if (account && account.dataValues.scholar !== null) {
         res.status(404).send({
           status: false,
-          messages: 'Account already register scholar',
+          messages: 'Akun tersebut sudah mendaftarkan scholar',
           results: null
         })
       }
@@ -97,7 +97,8 @@ module.exports = {
         phone: req.body.phone,
         address: req.body.address,
         gender: req.body.gender,
-        birthDate: req.body.birthDate
+        birthDate: req.body.birthDate,
+        accountId: req.body.accountId
       }
 
       const scholarUpdated = await Scholar.update(body, {

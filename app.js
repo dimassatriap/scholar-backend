@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-db.sequelize.sync().then(()=>{
+db.sequelize.sync({ force: false, alter: true }).then(()=>{
     console.log('Database Synced')
 })
 
