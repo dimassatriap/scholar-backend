@@ -2,6 +2,7 @@ module.exports = (app) => {
   const user = require("../controller/userController");
   const account = require("../controller/accountController");
   const scholar = require("../controller/scholarController");
+  const publication = require("../controller/publicationController");
   const product = require("../controller/productController");
   const section = require("../controller/sectionController");
   const loan = require("../controller/loanController");
@@ -47,6 +48,16 @@ module.exports = (app) => {
   
   //Delete Scholar
   app.delete("/scholar/:id", scholar.delete);
+
+  // MODEL: PUBLICATIONS
+  // All Publication
+  app.get("/publication", publication.findAll);
+
+  // Find One Scholar
+  app.get("/publication/:id", publication.findOne);
+
+  //Create Scholar
+  app.post("/publication", publication.create);
 
 
   // Customer
