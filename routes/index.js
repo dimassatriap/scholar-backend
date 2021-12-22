@@ -40,6 +40,9 @@ module.exports = (app) => {
   // Find One Scholar
   app.get("/scholar/:id", scholar.findOne);
 
+  // Find One Scholar and Publications
+  app.get("/scholar/:id/publication", scholar.findScholarWithPublication);
+
   //Create Scholar
   app.post("/scholar", scholar.create);
 
@@ -53,10 +56,10 @@ module.exports = (app) => {
   // All Publication
   app.get("/publication", publication.findAll);
 
-  // Find One Scholar
+  // Find One Publication
   app.get("/publication/:id", publication.findOne);
 
-  //Create Scholar
+  //Create Publication
   app.post("/publication", publication.create);
 
 

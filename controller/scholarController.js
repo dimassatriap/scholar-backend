@@ -47,6 +47,36 @@ module.exports = {
     }
   },
 
+  async findScholarWithPublication(req, res) {
+    try {
+      const id = req.params.id
+      const scholar = await Scholar.findByPk(id, { include: [
+        {
+          model: db.publications
+        }
+      ] })
+      if (scholar) {
+        res.status(200).send({
+          status: true,
+          messages: 'Success get scholar',
+          results: scholar
+        })
+      } else {
+        res.status(404).send({
+          status: false,
+          messages: 'Scholar not found',
+          results: null
+        })
+      }
+    } catch (error) {
+      res.status(500).send({
+        status: false,
+        messages: 'Some error occurred while retrieving Scholar',
+        results: error
+      })
+    }
+  },
+
   async create(req, res) {
     try {
       const id = req.body.accountId
