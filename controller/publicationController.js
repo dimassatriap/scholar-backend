@@ -62,5 +62,27 @@ module.exports = {
         results: error
       })
     }
+  },
+
+  async delete(req, res) {
+    try {
+      const id = req.params.id
+      const publication = await Publication.destroy({
+        where: {
+          id: id
+        }
+      })
+      res.status(200).send({
+        status: true,
+        messages: `Publikasi berhasil dihapus.`,
+        results: null
+      })
+    } catch (error) {
+      res.status(500).send({
+        status: false,
+        messages: 'Some error occurred while delete Scholar',
+        results: error
+      })
+    }
   }
 }

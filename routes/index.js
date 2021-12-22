@@ -62,6 +62,9 @@ module.exports = (app) => {
   //Create Publication
   app.post("/publication", publication.create);
 
+  //Delete Publication
+  app.delete("/publication/:id", publication.delete);
+
 
   // Customer
   // All User

@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   publications.associate = function(models) {
     // associations can be defined here
     publications.belongsTo(models.scholars);
-    publications.belongsToMany(models.scholars, { through: 'scholars_publications' });
+    // publications.belongsToMany(models.scholars, { through: 'scholars_publications' });
   };
   return publications;
 };
