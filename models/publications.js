@@ -7,8 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     pages: DataTypes.INTEGER,
     totalPages: DataTypes.INTEGER,
     ISBN: DataTypes.INTEGER,
-    publicationHost: DataTypes.STRING,
-    editors: DataTypes.STRING,
+    journal: DataTypes.STRING,
+    publisher: DataTypes.STRING,
+    number: DataTypes.STRING,
     publicationEvent: DataTypes.STRING,
     conference: DataTypes.STRING
   }, {});
