@@ -9,13 +9,13 @@ module.exports = {
       const scholars = await Scholar.findAll()
       res.status(200).send({
         status: true,
-        messages: 'Success get all scholar',
+        messages: 'Berhasil mendapat seluruh data scholar.',
         results: scholars
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Some error occured while retrieving Scholar',
+        messages: 'Terjadi kesalahan saat pengambilan data scholar.',
         results: error
       })
     }
@@ -28,20 +28,20 @@ module.exports = {
       if (scholar) {
         res.status(200).send({
           status: true,
-          messages: 'Success get scholar',
+          messages: 'Berhasil mendapatkan data scholar.',
           results: scholar
         })
       } else {
         res.status(404).send({
           status: false,
-          messages: 'Scholar not found',
+          messages: 'Scholar tidak ditemukan.',
           results: null
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Some error occurred while retrieving Scholar',
+        messages: 'Terjadi kesalahan saat pengambilan data Scholar',
         results: error
       })
     }
@@ -58,20 +58,20 @@ module.exports = {
       if (scholar) {
         res.status(200).send({
           status: true,
-          messages: 'Success get scholar',
+          messages: 'Berhasil mendapatkan data scholar dengan publikasinya.',
           results: scholar
         })
       } else {
         res.status(404).send({
           status: false,
-          messages: 'Scholar not found',
+          messages: 'Scholar tidak ditemukan.',
           results: null
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Some error occurred while retrieving Scholar',
+        messages: 'Terjadi kesalahan saat pengambilan data scholar.',
         results: error
       })
     }
@@ -88,7 +88,7 @@ module.exports = {
       if (account && account.dataValues.scholar !== null) {
         res.status(404).send({
           status: false,
-          messages: 'Akun tersebut sudah mendaftarkan scholar',
+          messages: 'Akun tersebut sudah mendaftarkan scholar.',
           results: null
         })
       }
@@ -99,20 +99,20 @@ module.exports = {
         const scholar = await Scholar.create(body)
         res.status(200).send({
           status: true,
-          messages: 'Success create scholar',
+          messages: 'Berhasil membuat scholar.',
           results: scholar
         })
       } else {
         res.status(404).send({
           status: false,
-          messages: 'Akun tidak ditemukan',
+          messages: 'Akun tidak ditemukan.',
           results: null
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Some error occurred while create Scholar',
+        messages: 'Terjadi kesalahan saat pengambilan data scholar.',
         results: error
       })
     }
@@ -140,13 +140,13 @@ module.exports = {
 
       res.status(200).send({
         status: true,
-        messages: 'Success update scholar',
+        messages: 'Berhasil mengubah scholar',
         results: scholar
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Some error occurred while update Scholar',
+        messages: 'Terjadi kesalahan saat perubahan data scholar',
         results: error
       })
     }
@@ -168,7 +168,7 @@ module.exports = {
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Some error occurred while delete Scholar',
+        messages: 'Terjadi kesalahan saat penghapusan data scholar.',
         results: error
       })
     }

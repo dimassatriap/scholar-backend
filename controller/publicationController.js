@@ -64,6 +64,34 @@ module.exports = {
     }
   },
 
+  async update(req, res) {
+    try {
+      const id = req.params.id
+      const body = {
+        ...req.body
+      }
+
+      const publicationUpdated = await Publication.update(body, {
+        where: {
+          id: id
+        }
+      })
+      const publication = await Publication.findByPk(id)
+
+      res.status(200).send({
+        status: true,
+        messages: 'Berhasil mengubah data publikasi.',
+        results: publication
+      })
+    } catch (error) {
+      res.status(500).send({
+        status: false,
+        messages: 'Terjadi kesalahan saat pengubahan data publikasi',
+        results: error
+      })
+    }
+  },
+
   async delete(req, res) {
     try {
       const id = req.params.id
@@ -80,7 +108,7 @@ module.exports = {
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Some error occurred while delete Scholar',
+        messages: 'Terjadi kesalahan saat penghapusan data publikasi.',
         results: error
       })
     }
