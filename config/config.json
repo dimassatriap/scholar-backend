@@ -21,6 +21,12 @@
     "database": "dejjqgkp726rdi",
     "host": "ec2-3-232-22-121.compute-1.amazonaws.com",
     "dialect": "postgres",
-    "operatorsAliases": false
+    "operatorsAliases": false,
+    "dialectOptions": {
+      "ssl": {
+          "require": true,
+          "rejectUnauthorized": false
+      }
+    }
   }
 }
