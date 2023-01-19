@@ -2,11 +2,31 @@ const db = require('../models')
 const Scholar = db.scholars
 const Account = db.accounts
 const bcrypt = require('bcryptjs')
+const { Op } = require("sequelize")
 
 module.exports = {
   async findAll(req, res) {
     try {
-      const scholars = await Scholar.findAll()
+      const include = []
+      const withPublications = req.query.withPublications
+      if (!!withPublications) {
+        include.push({
+          model: db.publications
+        })
+      }
+
+      const where = {}
+      const query = req.query.search
+      if (!!query) {
+        where[Op.or] = [
+          { 'name': { [Op.like]: '%' + query + '%' } },
+        ]
+      }
+
+      const scholars = await Scholar.findAll({
+        include,
+        where,
+      })
       res.status(200).send({
         status: true,
         messages: 'Berhasil mendapat seluruh data scholar.',

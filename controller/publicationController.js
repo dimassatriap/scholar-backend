@@ -1,6 +1,6 @@
 const db = require('../models')
 const Publication = db.publications
-const { Op } = require("sequelize");
+const { Op } = require("sequelize")
 
 module.exports = {
   async findAll(req, res) {
