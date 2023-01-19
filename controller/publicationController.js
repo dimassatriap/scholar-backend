@@ -1,10 +1,32 @@
 const db = require('../models')
 const Publication = db.publications
+const { Op } = require("sequelize");
 
 module.exports = {
   async findAll(req, res) {
     try {
-      const publication = await Publication.findAll()
+      const include = []
+      const withScholars = req.query.withScholars
+      if (!!withScholars) {
+        include.push({
+          model: db.scholars
+        })
+      }
+
+      const where = {}
+      const query = req.query.search
+      if (!!withScholars && !!query) {
+        where[Op.or] = [
+          { 'name': { [Op.like]: '%' + query + '%' } },
+          { 'abstract': { [Op.like]: '%' + query + '%' } },
+          { '$scholar.name$': { [Op.like]: '%' + query + '%' } },
+        ]
+      }
+
+      const publication = await Publication.findAll({
+        include,
+        where,
+      })
       res.status(200).send({
         status: true,
         messages: 'Sukses mangambil data publikasi.',
@@ -22,12 +44,16 @@ module.exports = {
   async findOne(req, res) {
     try {
       const id = req.params.id
-      const publication = await Publication.findByPk(id)
+      const publication = await Publication.findByPk(id, {
+        include: {
+          model: db.scholars
+        }
+      })
       if (publication) {
         res.status(200).send({
           status: true,
           messages: 'Sukses mangambil data publikasi.',
-          data: publication
+          results: publication
         })
       } else {
         res.status(404).send({
@@ -39,7 +65,7 @@ module.exports = {
       res.status(500).send({
         status: false,
         messages: 'Terjadi kesalahan saat pengambilan data publikasi.',
-        data: error
+        results: error
       })
     }
   },
