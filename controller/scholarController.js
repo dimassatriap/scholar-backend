@@ -148,6 +148,7 @@ module.exports = {
         address: req.body.address,
         gender: req.body.gender,
         birthDate: req.body.birthDate,
+        image: req.body.image,
         accountId: req.body.accountId
       }
 
