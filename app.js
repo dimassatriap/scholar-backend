@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
 const app = express();
-const db = require('./models');
 
 const config = {
     PORT: process.env.PORT || '3000',
@@ -10,6 +9,7 @@ const config = {
 }
 
 require('dotenv').config();
+const db = require('./models');
 app.use(cors());
 
 // parse requests of content-type - application/json
