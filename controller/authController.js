@@ -62,7 +62,25 @@ module.exports = {
       },
       include: [
         {
-          model: db.scholars
+          model: db.scholars,
+          include: [
+            {
+              attributes: ['name'],
+              model: db.departments,
+              include: [
+                {
+                  attributes: ['name'],
+                  model: db.faculties,
+                  include: [
+                    {
+                      attributes: ['name'],
+                      model: db.universities
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     })
