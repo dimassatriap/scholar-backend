@@ -1,6 +1,7 @@
 const db = require('../models')
 const Publication = db.publications
 const { Op } = require("sequelize")
+const paginate = require('../utils/paginate');
 
 module.exports = {
   async findAll(req, res) {
@@ -21,16 +22,29 @@ module.exports = {
           { 'abstract': { [Op.like]: '%' + query + '%' } },
           { '$scholar.name$': { [Op.like]: '%' + query + '%' } },
         ]
+      } else if (!!query) {
+        where[Op.or] = [
+          { 'name': { [Op.like]: '%' + query + '%' } },
+          { 'abstract': { [Op.like]: '%' + query + '%' } }
+        ]
       }
 
-      const publication = await Publication.findAll({
+      const page = Number(req.query?.page || 1);
+      const limit = Number(req.query?.itemsPerPage || 10);
+
+      const publication = await Publication.findAndCountAll({
         include,
         where,
+        ...(req.query?.itemsPerPage != -1 && {
+          offset: (page - 1) * limit,
+          limit
+        })
       })
+
       res.status(200).send({
         status: true,
         messages: 'Berhasil mangambil data publikasi.',
-        results: publication
+        ...paginate(publication, page, limit)
       })
     } catch (error) {
       res.status(500).send({
