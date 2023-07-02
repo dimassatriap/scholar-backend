@@ -5,7 +5,7 @@ module.exports = {
   async findAll(req, res){
     try {
       const universities = await University.findAll({
-        attributes: ['id', 'name'],
+        attributes: ['id', 'name', 'createdAt', 'updatedAt'],
         include: [
           {
             attributes: ['id', 'name'],
@@ -18,13 +18,14 @@ module.exports = {
         ]
       });
       res.status(200).send({
-        status: "Success",
+        status: true,
+        messages: 'Berhasil dapatkan semua universitas.',
         results: universities,
       })
     } catch(error){
       res.status(500).send({
-        status: "error",
-        messages: "Some error occured while retrieving University",
+        status: false,
+        messages: 'Terjadi kesalahan saat mengambil universitas.',
         results: error
       })
     }
@@ -36,19 +37,21 @@ module.exports = {
       const university = await University.findByPk(id);
       if (university){
         res.status(200).send({
-          status: "Success",
+          status: true,
+          messages: 'Berhasil mendapatkan universitas.',
           results: university
         });
       } else {
         res.status(404).send({
-          status: "Success",
-          messages: "University not found"
+          status: false,
+          messages: 'universitas tidak ditemukan.',
+          results: null
         });
       }
     } catch (error) {
       res.status(500).send({
-        status: "Error",
-        messages: "Some error occurred while retrieving university",
+        status: false,
+        messages: 'Terjadi kesalahan saat mengambil universitas.',
         results: error
       })
     }
@@ -61,15 +64,14 @@ module.exports = {
       };
       const university = await University.create(body);
       res.status(200).send({
-        is_success: true,
-        status: "Success",
+        status: true,
+        messages: 'Berhasil buat universitas.',
         results: university
       });
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: "Error",
-        messages: "Some error occurred while create university",
+        status: false,
+        messages: 'Terjadi kesalahan saat membuat universitas.',
         results: error
       })
     }
@@ -87,15 +89,14 @@ module.exports = {
         },
       });
       res.status(200).send({
-        is_success: true,
-        status: "Success",
+        status: true,
+        messages: 'Berhasil mengubah universitas.',
         results: university
       });
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: "Error",
-        messages: "Some error occurred while update university",
+        status: false,
+        messages: 'Terjadi kesalahan saat memperbarui universitas.',
         results: error
       });
     }
@@ -110,15 +111,14 @@ module.exports = {
         },
       });
       res.status(200).send({
-        is_success: true,
-        status: "Success",
-        messages: `${university} university deleted`
+        status: true,
+        messages: `Universitias berhasil dihapus`,
+        results: null
       })
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: "Error",
-        messages: "Some error occurred while delete university",
+        status: false,
+        messages: 'Terjadi kesalahan saat menghapus universitas',
         results: error
       });
     }

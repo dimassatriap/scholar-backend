@@ -10,13 +10,13 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        messages: 'Sukses dapatkan semua akun.',
+        messages: 'Berhasil dapatkan semua akun.',
         results: accounts
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Beberapa kesalahan terjadi saat mengambil Akun.',
+        messages: 'Terjadi kesalahan saat mengambil Akun.',
         results: error
       })
     }
@@ -43,7 +43,7 @@ module.exports = {
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Beberapa kesalahan terjadi saat mengambil Akun.',
+        messages: 'Terjadi kesalahan saat mengambil Akun.',
         results: error
       })
     }
@@ -59,13 +59,13 @@ module.exports = {
       const account = await Account.create(body)
       res.status(200).send({
         status: true,
-        messages: 'Sukses buat akun.',
+        messages: 'Berhasil buat akun.',
         results: account
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Beberapa kesalahan terjadi saat membuat Akun.',
+        messages: 'Terjadi kesalahan saat membuat Akun.',
         results: error
       })
     }
@@ -113,14 +113,14 @@ module.exports = {
       } catch (error) {
         res.status(500).send({
           status: false,
-          messages: 'Beberapa kesalahan terjadi saat memperbarui Akun.',
+          messages: 'Terjadi kesalahan saat memperbarui Akun.',
           results: error
         })
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Beberapa kesalahan terjadi saat memperbarui Akun.',
+        messages: 'Terjadi kesalahan saat memperbarui Akun.',
         results: error
       })
     }
@@ -142,7 +142,7 @@ module.exports = {
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Beberapa kesalahan terjadi saat menghapus Akun',
+        messages: 'Terjadi kesalahan saat menghapus Akun',
         results: error
       })
     }

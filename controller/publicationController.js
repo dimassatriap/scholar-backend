@@ -29,7 +29,7 @@ module.exports = {
       })
       res.status(200).send({
         status: true,
-        messages: 'Sukses mangambil data publikasi.',
+        messages: 'Berhasil mangambil data publikasi.',
         results: publication
       })
     } catch (error) {
@@ -52,7 +52,7 @@ module.exports = {
       if (publication) {
         res.status(200).send({
           status: true,
-          messages: 'Sukses mangambil data publikasi.',
+          messages: 'Berhasil mangambil data publikasi.',
           results: publication
         })
       } else {

@@ -70,16 +70,40 @@ module.exports = (app) => {
   // MODEL: Universities
   // All University
   app.get("/university", university.findAll);
+
   //Create University
   app.post("/university", university.create);
 
+  //Update University
+  app.put("/university/:id", university.update);
+
+  //Delete Account
+  app.delete("/university/:id", university.delete);
+
   // MODEL: Faculties
+  // All University
+  app.get("/faculty", faculty.findAll);
+
   //Create Faculty
-  app.post("/university/faculty", faculty.create);
+  app.post("/faculty", faculty.create);
+
+  //Update Faculty
+  app.put("/faculty/:id", faculty.update);
+
+  //Delete Faculty
+  app.delete("/faculty/:id", faculty.delete);
 
 
   // MODEL: Departments
   //Create Department
   app.get("/department", department.findAll);
-  app.post("/university/faculty/department", department.create);
+
+  //Create Department
+  app.post("/department", department.create);
+
+  //Update Department
+  app.put("/department/:id", department.update);
+
+  //Delete Department
+  app.delete("/department/:id", department.delete);
 };

@@ -5,7 +5,6 @@ module.exports = {
   async findAll(req, res) {
     try {
       const departments = await Department.findAll({
-        attributes: ['id', 'name'],
         include: [
           {
             attributes: ['id', 'name'],
@@ -18,13 +17,14 @@ module.exports = {
         ]
       })
       res.status(200).send({
-        status: 'Success',
+        status: true,
+        messages: 'Berhasil dapatkan semua departemen.',
         results: departments
       })
     } catch (error) {
       res.status(500).send({
-        status: 'error',
-        messages: 'Some error occured while retrieving Department',
+        status: false,
+        messages: 'Terjadi kesalahan saat mengambil departemen.',
         results: error
       })
     }
@@ -36,19 +36,21 @@ module.exports = {
       const department = await Department.findByPk(id)
       if (department) {
         res.status(200).send({
-          status: 'Success',
+          status: true,
+          messages: 'Berhasil mendapatkan departemen.',
           results: department
         })
       } else {
         res.status(404).send({
-          status: 'Success',
-          messages: 'Department not found'
+          status: false,
+          messages: 'Departemen tidak ditemukan.',
+          results: null
         })
       }
     } catch (error) {
       res.status(500).send({
-        status: 'Error',
-        messages: 'Some error occurred while retrieving department',
+        status: false,
+        messages: 'Terjadi kesalahan saat mengambil departemen.',
         results: error
       })
     }
@@ -62,15 +64,14 @@ module.exports = {
       }
       const department = await Department.create(body)
       res.status(200).send({
-        is_success: true,
-        status: 'Success',
+        status: true,
+        messages: 'Berhasil buat departemen.',
         results: department
       })
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: 'Error',
-        messages: 'Some error occurred while create department',
+        status: false,
+        messages: 'Terjadi kesalahan saat membuat departemen.',
         results: error
       })
     }
@@ -80,7 +81,8 @@ module.exports = {
     try {
       const id = req.params.id
       const body = {
-        name: req.body.name
+        name: req.body.name,
+        facultyId: req.body.facultyId
       }
       const department = await Department.update(body, {
         where: {
@@ -88,15 +90,14 @@ module.exports = {
         }
       })
       res.status(200).send({
-        is_success: true,
-        status: 'Success',
+        status: true,
+        messages: 'Berhasil mengubah departemen.',
         results: department
       })
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: 'Error',
-        messages: 'Some error occurred while update department',
+        status: false,
+        messages: 'Terjadi kesalahan saat memperbarui departemen.',
         results: error
       })
     }
@@ -111,15 +112,14 @@ module.exports = {
         }
       })
       res.status(200).send({
-        is_success: true,
-        status: 'Success',
-        messages: `${department} department deleted`
+        status: true,
+        messages: `Departemen berhasil dihapus`,
+        results: null
       })
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: 'Error',
-        messages: 'Some error occurred while delete department',
+        status: false,
+        messages: 'Terjadi kesalahan saat menghapus departemen',
         results: error
       })
     }

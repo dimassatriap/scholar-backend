@@ -5,21 +5,26 @@ module.exports = {
   async findAll(req, res){
     try {
       const faculties = await Faculty.findAll({
-        attributes: ['name'],
         include: [
           {
+            attributes: ['id', 'name'],
+            model: db.universities,
+          },
+          {
+            attributes: ['id', 'name'],
             model: db.departments,
           }
         ]
       });
       res.status(200).send({
-        status: "Success",
-        results: faculties,
+        status: true,
+        messages: 'Berhasil dapatkan semua fakultas.',
+        results: faculties
       })
     } catch(error){
       res.status(500).send({
-        status: "error",
-        messages: "Some error occured while retrieving Faculty",
+        status: false,
+        messages: 'Terjadi kesalahan saat mengambil fakultas.',
         results: error
       })
     }
@@ -31,19 +36,21 @@ module.exports = {
       const faculty = await Faculty.findByPk(id);
       if (faculty){
         res.status(200).send({
-          status: "Success",
+          status: true,
+          messages: 'Berhasil mendapatkan fakultas.',
           results: faculty
         });
       } else {
         res.status(404).send({
-          status: "Success",
-          messages: "Faculty not found"
+          status: false,
+          messages: 'Fakultas tidak ditemukan.',
+          results: null
         });
       }
     } catch (error) {
       res.status(500).send({
-        status: "Error",
-        messages: "Some error occurred while retrieving faculty",
+        status: false,
+        messages: 'Terjadi kesalahan saat mengambil fakultas.',
         results: error
       })
     }
@@ -57,15 +64,14 @@ module.exports = {
       };
       const faculty = await Faculty.create(body);
       res.status(200).send({
-        is_success: true,
-        status: "Success",
+        status: true,
+        messages: 'Berhasil buat fakultas.',
         results: faculty
       });
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: "Error",
-        messages: "Some error occurred while create faculty",
+        status: false,
+        messages: 'Terjadi kesalahan saat membuat fakultas.',
         results: error
       })
     }
@@ -76,6 +82,7 @@ module.exports = {
       const id = req.params.id;
       const body = {
         name: req.body.name,
+        universityId: req.body.universityId
       };
       const faculty = await Faculty.update(body, {
         where: {
@@ -83,15 +90,14 @@ module.exports = {
         },
       });
       res.status(200).send({
-        is_success: true,
-        status: "Success",
+        status: true,
+        messages: 'Berhasil mengubah fakultas.',
         results: faculty
       });
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: "Error",
-        messages: "Some error occurred while update faculty",
+        status: false,
+        messages: 'Terjadi kesalahan saat memperbarui fakultas.',
         results: error
       });
     }
@@ -106,15 +112,14 @@ module.exports = {
         },
       });
       res.status(200).send({
-        is_success: true,
-        status: "Success",
-        messages: `${faculty} faculty deleted`
+        status: true,
+        messages: `Fakultas berhasil dihapus`,
+        results: null
       })
     } catch (error) {
       res.status(500).send({
-        is_success: false,
-        status: "Error",
-        messages: "Some error occurred while delete faculty",
+        status: false,
+        messages: 'Terjadi kesalahan saat menghapus fakultas',
         results: error
       });
     }
