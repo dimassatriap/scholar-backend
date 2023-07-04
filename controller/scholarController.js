@@ -1,8 +1,9 @@
 const db = require('../models')
 const Scholar = db.scholars
 const Account = db.accounts
-const bcrypt = require('bcryptjs')
 const { Op } = require('sequelize')
+const paginate = require('../utils/paginate');
+
 
 module.exports = {
   async findAll(req, res) {
@@ -38,14 +39,21 @@ module.exports = {
         where[Op.or] = [{ name: { [Op.like]: '%' + query + '%' } }]
       }
 
-      const scholars = await Scholar.findAll({
+      const page = Number(req.query?.page || 1);
+      const limit = Number(req.query?.itemsPerPage || 12);
+
+      const scholars = await Scholar.findAndCountAll({
         include,
-        where
+        where,
+        ...(req.query?.itemsPerPage != -1 && {
+          offset: (page - 1) * limit,
+          limit
+        })
       })
       res.status(200).send({
         status: true,
         messages: 'Berhasil mendapat seluruh data scholar.',
-        results: scholars
+        ...paginate(scholars, page, limit)
       })
     } catch (error) {
       res.status(500).send({
