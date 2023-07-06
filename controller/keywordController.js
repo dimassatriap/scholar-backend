@@ -1,31 +1,19 @@
 const db = require("../models");
-const University = db.universities;
+const Keyword = db.keywords;
 
 module.exports = {
   async findAll(req, res){
     try {
-      const universities = await University.findAll({
-        attributes: ['id', 'name', 'createdAt', 'updatedAt'],
-        include: [
-          {
-            attributes: ['id', 'name'],
-            model: db.faculties, 
-            include: [{
-              attributes: ['id', 'name'],
-              model: db.departments
-            }]
-          }
-        ]
-      });
+      const keywords = await Keyword.findAll();
       res.status(200).send({
         status: true,
-        messages: 'Berhasil dapatkan semua universitas.',
-        results: universities,
+        messages: 'Berhasil dapatkan semua keyword.',
+        results: keywords,
       })
     } catch(error){
       res.status(500).send({
         status: false,
-        messages: 'Terjadi kesalahan saat mengambil universitas.',
+        messages: 'Terjadi kesalahan saat mengambil keyword.',
         results: error
       })
     }
@@ -34,24 +22,24 @@ module.exports = {
   async findOne(req, res){
     try {
       const id = req.params.id;
-      const university = await University.findByPk(id);
-      if (university){
+      const keyword = await Keyword.findByPk(id);
+      if (keyword){
         res.status(200).send({
           status: true,
-          messages: 'Berhasil mendapatkan universitas.',
-          results: university
+          messages: 'Berhasil mendapatkan keyword.',
+          results: keyword
         });
       } else {
         res.status(404).send({
           status: false,
-          messages: 'universitas tidak ditemukan.',
+          messages: 'keyword tidak ditemukan.',
           results: null
         });
       }
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Terjadi kesalahan saat mengambil universitas.',
+        messages: 'Terjadi kesalahan saat mengambil keyword.',
         results: error
       })
     }
@@ -62,16 +50,16 @@ module.exports = {
       const body = {
         name: req.body.name,
       };
-      const university = await University.create(body);
+      const keyword = await Keyword.create(body);
       res.status(200).send({
         status: true,
-        messages: 'Berhasil buat universitas.',
-        results: university
+        messages: 'Berhasil buat keyword.',
+        results: keyword
       });
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Terjadi kesalahan saat membuat universitas.',
+        messages: 'Terjadi kesalahan saat membuat keyword.',
         results: error
       })
     }
@@ -83,20 +71,20 @@ module.exports = {
       const body = {
         name: req.body.name,
       };
-      const university = await University.update(body, {
+      const keyword = await Keyword.update(body, {
         where: {
           id: id,
         },
       });
       res.status(200).send({
         status: true,
-        messages: 'Berhasil mengubah universitas.',
-        results: university
+        messages: 'Berhasil mengubah keyword.',
+        results: keyword
       });
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Terjadi kesalahan saat memperbarui universitas.',
+        messages: 'Terjadi kesalahan saat memperbarui keyword.',
         results: error
       });
     }
@@ -105,20 +93,20 @@ module.exports = {
   async delete(req, res) {
     try {
       const id = req.params.id;
-      const university = await University.destroy({
+      const keyword = await Keyword.destroy({
         where: {
           id: id,
         },
       });
       res.status(200).send({
         status: true,
-        messages: `Universitas berhasil dihapus`,
+        messages: `Keyword berhasil dihapus`,
         results: null
       })
     } catch (error) {
       res.status(500).send({
         status: false,
-        messages: 'Terjadi kesalahan saat menghapus universitas',
+        messages: 'Terjadi kesalahan saat menghapus keyword',
         results: error
       });
     }

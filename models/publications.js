@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     publications.belongsTo(models.scholars);
     // publications.belongsToMany(models.scholars, { through: 'scholars_publications' });
+    publications.belongsToMany(models.keywords, { as: 'keywords', through: 'publications_keywords' });
   };
   return publications;
 };

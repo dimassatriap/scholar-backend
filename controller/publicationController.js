@@ -1,12 +1,18 @@
 const db = require('../models')
 const Publication = db.publications
+const PublicationKeywords = db.publications_keywords
 const { Op } = require("sequelize")
 const paginate = require('../utils/paginate');
 
 module.exports = {
   async findAll(req, res) {
     try {
-      const include = []
+      const include = [{
+        model: db.keywords,
+        as: 'keywords',
+        attributes: ['name'],
+        through: { attributes: [] }
+      }]
       const withScholars = req.query.withScholars
       if (!!withScholars) {
         include.push({
@@ -33,6 +39,7 @@ module.exports = {
       const limit = Number(req.query?.itemsPerPage || 10);
 
       const publication = await Publication.findAndCountAll({
+        distinct: true,
         include,
         where,
         ...(req.query?.itemsPerPage != -1 && {
@@ -90,6 +97,27 @@ module.exports = {
         ...req.body
       }
       const publication = await Publication.create(body)
+
+      let keywords = req.body.keywords
+      if (keywords?.length) {
+        keywords = keywords.split(',')
+
+        const numberKeywords = keywords.filter(e => !isNaN(e))
+        const pubKeywords = numberKeywords.map(n => { return { publicationId: publication.id,  keywordId: n} })
+
+        const stringKeywords = keywords.filter(e => isNaN(e))
+        if (stringKeywords.length) {
+          const names = stringKeywords.map(s => { return { name: s } })
+          const res = await db.keywords.bulkCreate(names)
+          for (let i = 0; i < res.length; i++) {
+            const keyword = res[i];
+            pubKeywords.push({ publicationId: publication.id,  keywordId: keyword.id})
+          }
+        }
+
+        await PublicationKeywords.bulkCreate(pubKeywords);
+      }
+
       res.status(200).send({
         status: true,
         messages: 'Publikasi berhasil dibuat.',
@@ -110,12 +138,38 @@ module.exports = {
       const body = {
         ...req.body
       }
+      let keywords = req.body.keywords
 
       const publicationUpdated = await Publication.update(body, {
         where: {
           id: id
         }
       })
+
+      if (keywords == "") {
+        await PublicationKeywords.destroy({ where: { publicationId: id }})
+      }
+      
+      if (keywords?.length) {
+        keywords = keywords.split(',')
+
+        const numberKeywords = keywords.filter(e => !isNaN(e))
+        const pubKeywords = numberKeywords.map(n => { return { publicationId: id,  keywordId: n} })
+
+        const stringKeywords = keywords.filter(e => isNaN(e))
+        if (stringKeywords.length) {
+          const names = stringKeywords.map(s => { return { name: s } })
+          const res = await db.keywords.bulkCreate(names)
+          for (let i = 0; i < res.length; i++) {
+            const keyword = res[i];
+            pubKeywords.push({ publicationId: id,  keywordId: keyword.id})
+          }
+        }
+
+        await PublicationKeywords.destroy({ where: { publicationId: id }})
+        await PublicationKeywords.bulkCreate(pubKeywords);
+      }
+
       const publication = await Publication.findByPk(id)
 
       res.status(200).send({

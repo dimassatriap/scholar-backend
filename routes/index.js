@@ -6,6 +6,7 @@ module.exports = (app) => {
   const university = require("../controller/universityController");
   const faculty = require("../controller/facultyController");
   const department = require("../controller/departmentController");
+  const keyword = require("../controller/keywordController");
 
   // Default
   app.get("/", (req, res) => {
@@ -77,7 +78,7 @@ module.exports = (app) => {
   //Update University
   app.put("/university/:id", university.update);
 
-  //Delete Account
+  //Delete University
   app.delete("/university/:id", university.delete);
 
   // MODEL: Faculties
@@ -106,4 +107,18 @@ module.exports = (app) => {
 
   //Delete Department
   app.delete("/department/:id", department.delete);
+
+
+  // MODEL: Keywords
+  // All Keyword
+  app.get("/keyword", keyword.findAll);
+
+  //Create Keyword
+  app.post("/keyword", keyword.create);
+
+  //Update Keyword
+  app.put("/keyword/:id", keyword.update);
+
+  //Delete Account
+  app.delete("/keyword/:id", keyword.delete);
 };
