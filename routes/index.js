@@ -7,6 +7,7 @@ module.exports = (app) => {
   const faculty = require("../controller/facultyController");
   const department = require("../controller/departmentController");
   const keyword = require("../controller/keywordController");
+  const helpdesk = require("../controller/helpdeskController");
 
   // Default
   app.get("/", (req, res) => {
@@ -122,6 +123,19 @@ module.exports = (app) => {
   //Update Keyword
   app.put("/keyword/:id", keyword.update);
 
-  //Delete Account
+  //Delete Keyword
   app.delete("/keyword/:id", keyword.delete);
+
+  // MODEL: Helpdesks
+  // All Helpdesk
+  app.get("/helpdesk", helpdesk.findAll);
+
+  //Create Helpdesk
+  app.post("/helpdesk", helpdesk.create);
+
+  //Update Helpdesk
+  app.put("/helpdesk/:id", helpdesk.update);
+
+  //Delete Helpdesk
+  app.delete("/helpdesk/:id", helpdesk.delete);
 };
