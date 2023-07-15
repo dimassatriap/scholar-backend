@@ -1,42 +1,58 @@
 const db = require('../models')
 const Publication = db.publications
 const PublicationKeywords = db.publications_keywords
-const { Op } = require("sequelize")
-const paginate = require('../utils/paginate');
+const { Op } = require('sequelize')
+const paginate = require('../utils/paginate')
 
 module.exports = {
   async findAll(req, res) {
     try {
-      const include = [{
-        model: db.keywords,
-        as: 'keywords',
-        attributes: ['name'],
-        through: { attributes: [] }
-      }]
+      const where = {}
+      const query = req.query.search
+      let keywords = req.query.keywords
+      if (keywords?.length) {
+        keywords = keywords.split(',')
+      }
+
+      if (!!query) {
+        where[Op.or] = [
+          { name: { [Op.like]: '%' + query + '%' } },
+          { abstract: { [Op.like]: '%' + query + '%' } }
+          // { '$scholar.name$': { [Op.like]: '%' + query + '%' } }
+        ]
+      }
+
+      // if (keywords) {
+      //   where['$keywords.id$'] = { [Op.in]: keywords }
+      // }
+
+      const include = [
+        {
+          model: db.keywords,
+          as: 'keywords',
+          attributes: ['id', 'name'],
+          through: {
+            attributes: [],
+            where: keywords
+              ? {
+                  keywordId: { [Op.in]: keywords }
+                }
+              : undefined
+          },
+          required: !!keywords
+        }
+      ]
+
       const withScholars = req.query.withScholars
       if (!!withScholars) {
         include.push({
-          model: db.scholars
+          model: db.scholars,
+          as: 'scholar'
         })
       }
 
-      const where = {}
-      const query = req.query.search
-      if (!!withScholars && !!query) {
-        where[Op.or] = [
-          { 'name': { [Op.like]: '%' + query + '%' } },
-          { 'abstract': { [Op.like]: '%' + query + '%' } },
-          { '$scholar.name$': { [Op.like]: '%' + query + '%' } },
-        ]
-      } else if (!!query) {
-        where[Op.or] = [
-          { 'name': { [Op.like]: '%' + query + '%' } },
-          { 'abstract': { [Op.like]: '%' + query + '%' } }
-        ]
-      }
-
-      const page = Number(req.query?.page || 1);
-      const limit = Number(req.query?.itemsPerPage || 10);
+      const page = Number(req.query?.page || 1)
+      const limit = Number(req.query?.itemsPerPage || 10)
 
       const publication = await Publication.findAndCountAll({
         distinct: true,
@@ -102,20 +118,24 @@ module.exports = {
       if (keywords?.length) {
         keywords = keywords.split(',')
 
-        const numberKeywords = keywords.filter(e => !isNaN(e))
-        const pubKeywords = numberKeywords.map(n => { return { publicationId: publication.id,  keywordId: n} })
+        const numberKeywords = keywords.filter((e) => !isNaN(e))
+        const pubKeywords = numberKeywords.map((n) => {
+          return { publicationId: publication.id, keywordId: n }
+        })
 
-        const stringKeywords = keywords.filter(e => isNaN(e))
+        const stringKeywords = keywords.filter((e) => isNaN(e))
         if (stringKeywords.length) {
-          const names = stringKeywords.map(s => { return { name: s } })
+          const names = stringKeywords.map((s) => {
+            return { name: s }
+          })
           const res = await db.keywords.bulkCreate(names)
           for (let i = 0; i < res.length; i++) {
-            const keyword = res[i];
-            pubKeywords.push({ publicationId: publication.id,  keywordId: keyword.id})
+            const keyword = res[i]
+            pubKeywords.push({ publicationId: publication.id, keywordId: keyword.id })
           }
         }
 
-        await PublicationKeywords.bulkCreate(pubKeywords);
+        await PublicationKeywords.bulkCreate(pubKeywords)
       }
 
       res.status(200).send({
@@ -146,28 +166,32 @@ module.exports = {
         }
       })
 
-      if (keywords == "") {
-        await PublicationKeywords.destroy({ where: { publicationId: id }})
+      if (keywords == '') {
+        await PublicationKeywords.destroy({ where: { publicationId: id } })
       }
-      
+
       if (keywords?.length) {
         keywords = keywords.split(',')
 
-        const numberKeywords = keywords.filter(e => !isNaN(e))
-        const pubKeywords = numberKeywords.map(n => { return { publicationId: id,  keywordId: n} })
+        const numberKeywords = keywords.filter((e) => !isNaN(e))
+        const pubKeywords = numberKeywords.map((n) => {
+          return { publicationId: id, keywordId: n }
+        })
 
-        const stringKeywords = keywords.filter(e => isNaN(e))
+        const stringKeywords = keywords.filter((e) => isNaN(e))
         if (stringKeywords.length) {
-          const names = stringKeywords.map(s => { return { name: s } })
+          const names = stringKeywords.map((s) => {
+            return { name: s }
+          })
           const res = await db.keywords.bulkCreate(names)
           for (let i = 0; i < res.length; i++) {
-            const keyword = res[i];
-            pubKeywords.push({ publicationId: id,  keywordId: keyword.id})
+            const keyword = res[i]
+            pubKeywords.push({ publicationId: id, keywordId: keyword.id })
           }
         }
 
-        await PublicationKeywords.destroy({ where: { publicationId: id }})
-        await PublicationKeywords.bulkCreate(pubKeywords);
+        await PublicationKeywords.destroy({ where: { publicationId: id } })
+        await PublicationKeywords.bulkCreate(pubKeywords)
       }
 
       const publication = await Publication.findByPk(id)
