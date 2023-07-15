@@ -3,6 +3,7 @@ const Publication = db.publications
 const PublicationKeywords = db.publications_keywords
 const { Op } = require('sequelize')
 const paginate = require('../utils/paginate')
+const Sequelize = require('sequelize')
 
 module.exports = {
   async findAll(req, res) {
@@ -19,6 +20,18 @@ module.exports = {
           { name: { [Op.like]: '%' + query + '%' } },
           { abstract: { [Op.like]: '%' + query + '%' } }
           // { '$scholar.name$': { [Op.like]: '%' + query + '%' } }
+        ]
+      }
+
+      let publishYear = req.query.publishYear
+      if (publishYear?.length) {
+        publishYear = publishYear.split(',')
+      }
+      if (publishYear) {
+        where[Op.and] = [
+          Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('publishDate')), {
+            [Op.in]: publishYear
+          }),
         ]
       }
 
@@ -53,6 +66,7 @@ module.exports = {
 
       const page = Number(req.query?.page || 1)
       const limit = Number(req.query?.itemsPerPage || 10)
+      const orderPublishDate = req.query?.orderPublishDate || 'DESC'
 
       const publication = await Publication.findAndCountAll({
         distinct: true,
@@ -61,7 +75,10 @@ module.exports = {
         ...(req.query?.itemsPerPage != -1 && {
           offset: (page - 1) * limit,
           limit
-        })
+        }),
+        order: [
+          ['publishDate', orderPublishDate]
+        ]
       })
 
       res.status(200).send({
@@ -73,6 +90,34 @@ module.exports = {
       res.status(500).send({
         status: false,
         messages: 'Terjadi kesalahan saat pengambilan data publication.',
+        results: error
+      })
+    }
+  },
+
+  async getPublishYear(req, res){
+    try {
+      const years = await Publication.findAll({
+        attributes: [
+          [Sequelize.fn("YEAR", Sequelize.col("publishDate")), "year"],
+        ],
+        group: ["year"],
+        order: [
+          ['publishDate', 'DESC']
+        ]
+      });
+
+      const publishYears = years.map((e) => e.dataValues.year).filter(e => !!e)
+
+      res.status(200).send({
+        status: true,
+        messages: 'Berhasil dapatkan semua tahun publikasi.',
+        results: publishYears,
+      })
+    } catch(error){
+      res.status(500).send({
+        status: false,
+        messages: 'Terjadi kesalahan saat mengambil tahun publikasi.',
         results: error
       })
     }

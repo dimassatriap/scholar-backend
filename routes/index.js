@@ -56,6 +56,9 @@ module.exports = (app) => {
   // All Publication
   app.get("/publication", publication.findAll);
 
+  // All Publish Year
+  app.get("/publication/publish-year", publication.getPublishYear);
+
   // Find One Publication
   app.get("/publication/:id", publication.findOne);
 
