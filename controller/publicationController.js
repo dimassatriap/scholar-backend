@@ -29,7 +29,7 @@ module.exports = {
       }
       if (publishYear) {
         where[Op.and] = [
-          Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('publishDate')), {
+          Sequelize.where(Sequelize.literal('extract(YEAR from "publications"."publishDate")'), {
             [Op.in]: publishYear
           }),
         ]
