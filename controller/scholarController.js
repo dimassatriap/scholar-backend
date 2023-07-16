@@ -48,7 +48,10 @@ module.exports = {
         ...(req.query?.itemsPerPage != -1 && {
           offset: (page - 1) * limit,
           limit
-        })
+        }),
+        order: [
+          ['createdAt', 'ASC']
+        ]
       })
       res.status(200).send({
         status: true,
