@@ -99,11 +99,11 @@ module.exports = {
     try {
       const years = await Publication.findAll({
         attributes: [
-          [Sequelize.fn("YEAR", Sequelize.col("publishDate")), "year"],
+          [Sequelize.literal('extract(YEAR from "publications"."publishDate")'), "year"],
         ],
         group: ["year"],
         order: [
-          ['publishDate', 'DESC']
+          [Sequelize.literal('year'), "DESC"]
         ]
       });
 
