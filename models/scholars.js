@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     scholars.belongsTo(models.accounts);
     scholars.hasMany(models.publications);
     // scholars.belongsToMany(models.publications, { through: 'scholars_publications' });
-    scholars.belongsToMany(models.institusions, { through: 'scholars_institusions' });
     scholars.belongsTo(models.departments);
   };
   return scholars;
