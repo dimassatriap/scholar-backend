@@ -1,12 +1,13 @@
 module.exports = (app) => {
-  const user = require("../controller/userController");
   const account = require("../controller/accountController");
   const scholar = require("../controller/scholarController");
   const publication = require("../controller/publicationController");
-  const product = require("../controller/productController");
-  const section = require("../controller/sectionController");
-  const loan = require("../controller/loanController");
   const auth = require("../controller/authController");
+  const university = require("../controller/universityController");
+  const faculty = require("../controller/facultyController");
+  const department = require("../controller/departmentController");
+  const keyword = require("../controller/keywordController");
+  const helpdesk = require("../controller/helpdeskController");
 
   // Default
   app.get("/", (req, res) => {
@@ -56,6 +57,9 @@ module.exports = (app) => {
   // All Publication
   app.get("/publication", publication.findAll);
 
+  // All Publish Year
+  app.get("/publication/publish-year", publication.getPublishYear);
+
   // Find One Publication
   app.get("/publication/:id", publication.findOne);
 
@@ -68,87 +72,70 @@ module.exports = (app) => {
   //Delete Publication
   app.delete("/publication/:id", publication.delete);
 
+  // MODEL: Universities
+  // All University
+  app.get("/university", university.findAll);
 
-  // Customer
-  // All User
-  app.get("/user", user.findAllUser);
+  //Create University
+  app.post("/university", university.create);
 
-  // User's Product
-  app.get("/userproduct/:id", user.findUserProduct);
+  //Update University
+  app.put("/university/:id", university.update);
 
-  // User's Loan
-  app.get("/user/loan/:id", user.findUserLoan);
+  //Delete University
+  app.delete("/university/:id", university.delete);
 
-  // Find One User
-  app.get("/user/:id", user.findOne);
+  // MODEL: Faculties
+  // All University
+  app.get("/faculty", faculty.findAll);
 
-  //Create User
-  app.post("/user", user.create);
+  //Create Faculty
+  app.post("/faculty", faculty.create);
 
-  //Update User
-  app.put("/user/:id", user.update);
+  //Update Faculty
+  app.put("/faculty/:id", faculty.update);
 
-  //Delete User
-  app.delete("/user/:id", user.delete);
+  //Delete Faculty
+  app.delete("/faculty/:id", faculty.delete);
 
 
-  //Product
-  // All product
-  app.get("/product", product.findAllProduct);
+  // MODEL: Departments
+  //Create Department
+  app.get("/department", department.findAll);
 
-  // Product with section information
-  app.get("/product-section", product.getAllRequestProduct);
+  //Create Department
+  app.post("/department", department.create);
 
-  // All Request product
-  // app.get("/request-product", product.findRequestProduct);
+  //Update Department
+  app.put("/department/:id", department.update);
 
-  // Find One product
-  app.get("/product/:id", product.findOne);
+  //Delete Department
+  app.delete("/department/:id", department.delete);
 
-  // Create product
-  app.post("/product", product.create);
 
-  // Update product
-  app.put("/product/:id", product.update);
+  // MODEL: Keywords
+  // All Keyword
+  app.get("/keyword", keyword.findAll);
 
-  // Delete product
-  app.delete("/product/:id", product.delete);
+  //Create Keyword
+  app.post("/keyword", keyword.create);
 
-  // Section
-  // Find All Section
-  app.get("/section", section.findAllSection);
+  //Update Keyword
+  app.put("/keyword/:id", keyword.update);
 
-  // get one Section
-  app.get("/section/:id", section.findOne);
+  //Delete Keyword
+  app.delete("/keyword/:id", keyword.delete);
 
-  // Find All Request product in section
-  app.get("/request-section", section.getAllRequestSection);
+  // MODEL: Helpdesks
+  // All Helpdesk
+  app.get("/helpdesk", helpdesk.findAll);
 
-  // Find All Request product in section
-  app.get("/offer-section", section.getAllOfferSection);
+  //Create Helpdesk
+  app.post("/helpdesk", helpdesk.create);
 
-  // Create Product Section
-  app.post("/section", section.create);
+  //Update Helpdesk
+  app.put("/helpdesk/:id", helpdesk.update);
 
-  // Update Product Section 
-  app.put("/section/:id", section.update);
-
-  //delete Product Section
-  app.delete("/section/:id", section.delete);
-
-  //Loan
-  // All Loan
-  app.get("/loan", loan.findAllLoan);
-
-  // find one Loan
-  app.get("/loan/:id", loan.findOne);
-
-  // create Loan
-  app.post("/loan", loan.create);
-
-  // Update Loan 
-  app.put("/loan/:id", loan.update);
-
-  //delete Loan
-  app.delete("/loan/:id", loan.delete);
+  //Delete Helpdesk
+  app.delete("/helpdesk/:id", helpdesk.delete);
 };

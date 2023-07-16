@@ -1,13 +1,31 @@
 const db = require('../models')
 const Scholar = db.scholars
 const Account = db.accounts
-const bcrypt = require('bcryptjs')
-const { Op } = require("sequelize")
+const { Op } = require('sequelize')
+const paginate = require('../utils/paginate');
+
 
 module.exports = {
   async findAll(req, res) {
     try {
-      const include = []
+      const include = [
+        {
+          attributes: ['name'],
+          model: db.departments,
+          include: [
+            {
+              attributes: ['name'],
+              model: db.faculties,
+              include: [
+                {
+                  attributes: ['name'],
+                  model: db.universities
+                }
+              ]
+            }
+          ]
+        }
+      ]
       const withPublications = req.query.withPublications
       if (!!withPublications) {
         include.push({
@@ -18,19 +36,24 @@ module.exports = {
       const where = {}
       const query = req.query.search
       if (!!query) {
-        where[Op.or] = [
-          { 'name': { [Op.like]: '%' + query + '%' } },
-        ]
+        where[Op.or] = [{ name: { [Op.like]: '%' + query + '%' } }]
       }
 
-      const scholars = await Scholar.findAll({
+      const page = Number(req.query?.page || 1);
+      const limit = Number(req.query?.itemsPerPage || 12);
+
+      const scholars = await Scholar.findAndCountAll({
         include,
         where,
+        ...(req.query?.itemsPerPage != -1 && {
+          offset: (page - 1) * limit,
+          limit
+        })
       })
       res.status(200).send({
         status: true,
         messages: 'Berhasil mendapat seluruh data scholar.',
-        results: scholars
+        ...paginate(scholars, page, limit)
       })
     } catch (error) {
       res.status(500).send({
@@ -70,11 +93,35 @@ module.exports = {
   async findScholarWithPublication(req, res) {
     try {
       const id = req.params.id
-      const scholar = await Scholar.findByPk(id, { include: [
-        {
-          model: db.publications
-        }
-      ] })
+      const scholar = await Scholar.findByPk(id, {
+        include: [
+          {
+            model: db.publications,
+            include: [{
+              model: db.keywords,
+              as: 'keywords',
+              attributes: ['id', 'name'],
+              through: { attributes: [] }
+            }]
+          },
+          {
+            attributes: ['name'],
+            model: db.departments,
+            include: [
+              {
+                attributes: ['name'],
+                model: db.faculties,
+                include: [
+                  {
+                    attributes: ['name'],
+                    model: db.universities
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      })
       if (scholar) {
         res.status(200).send({
           status: true,
@@ -101,9 +148,11 @@ module.exports = {
     try {
       const id = req.body.accountId
       const account = await Account.findByPk(id, {
-        include: [{
-          model: db.scholars
-        }]
+        include: [
+          {
+            model: db.scholars
+          }
+        ]
       })
       if (account && account.dataValues.scholar !== null) {
         res.status(404).send({
@@ -111,8 +160,7 @@ module.exports = {
           messages: 'Akun tersebut sudah mendaftarkan scholar.',
           results: null
         })
-      }
-      else if (account) {
+      } else if (account) {
         const body = {
           ...req.body
         }
@@ -149,7 +197,8 @@ module.exports = {
         gender: req.body.gender,
         birthDate: req.body.birthDate,
         image: req.body.image,
-        accountId: req.body.accountId
+        accountId: req.body.accountId,
+        departmentId: req.body.departmentId
       }
 
       const scholarUpdated = await Scholar.update(body, {
@@ -157,7 +206,27 @@ module.exports = {
           id: id
         }
       })
-      const scholar = await Scholar.findByPk(id)
+
+      const include = [
+        {
+          attributes: ['name'],
+          model: db.departments,
+          include: [
+            {
+              attributes: ['name'],
+              model: db.faculties,
+              include: [
+                {
+                  attributes: ['name'],
+                  model: db.universities
+                }
+              ]
+            }
+          ]
+        }
+      ]
+
+      const scholar = await Scholar.findByPk(id, { include })
 
       res.status(200).send({
         status: true,
