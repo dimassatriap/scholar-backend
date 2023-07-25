@@ -17,8 +17,15 @@ module.exports = {
 
       if (!!query) {
         where[Op.or] = [
-          { name: { [Op.like]: '%' + query + '%' } },
-          { abstract: { [Op.like]: '%' + query + '%' } }
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."name"')), {
+            [Op.like]: '%' + query.toLowerCase() + '%'
+          }),
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."abstract"')), {
+            [Op.like]: '%' + query.toLowerCase() + '%'
+          }),
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."coAuthor"')), {
+            [Op.like]: '%' + query.toLowerCase() + '%'
+          }),
           // { '$scholar.name$': { [Op.like]: '%' + query + '%' } }
         ]
       }
