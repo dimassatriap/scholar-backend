@@ -26,6 +26,9 @@ module.exports = {
           Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."coAuthor"')), {
             [Op.like]: '%' + query.toLowerCase() + '%'
           }),
+          // Sequelize.where(Sequelize.fn('lower', Sequelize.col('"scholar"."name"')), {
+          //   [Op.like]: '%' + query.toLowerCase() + '%'
+          // }),
           // { '$scholar.name$': { [Op.like]: '%' + query + '%' } }
         ]
       }
@@ -76,6 +79,7 @@ module.exports = {
       const orderPublishDate = req.query?.orderPublishDate || 'DESC'
 
       const publication = await Publication.findAndCountAll({
+        // subQuery: false,
         distinct: true,
         include,
         where,
