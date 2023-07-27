@@ -39,9 +39,20 @@ module.exports = {
       }
       if (publishYear) {
         where[Op.and] = [
-          Sequelize.where(Sequelize.literal('extract(YEAR from "publications"."publishDate")'), {
-            [Op.in]: publishYear
-          }),
+          ...( process.env.NODE_ENV == 'development' 
+            ? [
+              // MySQL
+              Sequelize.where(Sequelize.fn('YEAR', Sequelize.col('publishDate')), {
+                [Op.in]: publishYear
+              }),
+            ]
+            : [
+              // PostgreSQL
+              Sequelize.where(Sequelize.literal('extract(YEAR from "publications"."publishDate")'), {
+                [Op.in]: publishYear
+              }),
+            ]
+          )
         ]
       }
 
@@ -108,15 +119,30 @@ module.exports = {
 
   async getPublishYear(req, res){
     try {
-      const years = await Publication.findAll({
-        attributes: [
-          [Sequelize.literal('extract(YEAR from "publications"."publishDate")'), "year"],
-        ],
-        group: ["year"],
-        order: [
-          [Sequelize.literal('year'), "DESC"]
-        ]
-      });
+      let years;
+      if (process.env.NODE_ENV == 'development') {
+        // MySQL
+        years = await Publication.findAll({
+          attributes: [
+            [Sequelize.fn("YEAR", Sequelize.col("publishDate")), "year"],
+          ],
+          group: ["year"],
+          order: [
+            ['publishDate', 'DESC']
+          ]
+        });
+      } else {
+        // PostgreSQL
+        years = await Publication.findAll({
+          attributes: [
+            [Sequelize.literal('extract(YEAR from "publications"."publishDate")'), "year"],
+          ],
+          group: ["year"],
+          order: [
+            [Sequelize.literal('year'), "DESC"]
+          ]
+        });
+      }
 
       const publishYears = years.map((e) => e.dataValues.year).filter(e => !!e)
 
