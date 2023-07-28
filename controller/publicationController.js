@@ -2,7 +2,7 @@ const db = require('../models')
 const Publication = db.publications
 const PublicationKeywords = db.publications_keywords
 const { Op } = require('sequelize')
-const paginate = require('../utils/paginate')
+const paginateManual = require('../utils/paginateManual')
 const Sequelize = require('sequelize')
 
 module.exports = {
@@ -26,10 +26,9 @@ module.exports = {
           Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."coAuthor"')), {
             [Op.like]: '%' + query.toLowerCase() + '%'
           }),
-          // Sequelize.where(Sequelize.fn('lower', Sequelize.col('"scholar"."name"')), {
-          //   [Op.like]: '%' + query.toLowerCase() + '%'
-          // }),
-          // { '$scholar.name$': { [Op.like]: '%' + query + '%' } }
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('"scholar"."name"')), {
+            [Op.like]: '%' + query.toLowerCase() + '%'
+          }),
         ]
       }
 
@@ -55,10 +54,6 @@ module.exports = {
           )
         ]
       }
-
-      // if (keywords) {
-      //   where['$keywords.id$'] = { [Op.in]: keywords }
-      // }
 
       const include = [
         {
@@ -90,14 +85,10 @@ module.exports = {
       const orderPublishDate = req.query?.orderPublishDate || 'DESC'
 
       const publication = await Publication.findAndCountAll({
-        // subQuery: false,
+        subQuery: false,
         distinct: true,
         include,
         where,
-        ...(req.query?.itemsPerPage != -1 && {
-          offset: (page - 1) * limit,
-          limit
-        }),
         order: [
           ['publishDate', orderPublishDate]
         ]
@@ -106,7 +97,7 @@ module.exports = {
       res.status(200).send({
         status: true,
         messages: 'Berhasil mangambil data publikasi.',
-        ...paginate(publication, page, limit)
+        ...paginateManual(publication, page, limit)
       })
     } catch (error) {
       res.status(500).send({
@@ -194,6 +185,34 @@ module.exports = {
       const body = {
         ...req.body
       }
+
+      const existing = await Publication.findOne({
+        where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."name"')), body.name?.toLowerCase()),
+        include: db.scholars
+      });
+
+      let existingISSN;
+      if (body.ISSN) {
+        existingISSN = await Publication.findOne({
+          where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."ISSN"')), body.ISSN?.toLowerCase()),
+          include: db.scholars
+        });
+      }
+
+      if (existing) {
+        return res.status(400).send({
+          status: false,
+          messages: 'Publikasi dengan judul tersebut sudah terbuat sebelumnya.',
+          results: null
+        })
+      } else if (existingISSN) {
+        return res.status(400).send({
+          status: false,
+          messages: 'Publikasi dengan ISSN tersebut sudah terbuat sebelumnya.',
+          results: null
+        })
+      }
+
       const publication = await Publication.create(body)
 
       let keywords = req.body.keywords
@@ -241,6 +260,33 @@ module.exports = {
         ...req.body
       }
       let keywords = req.body.keywords
+
+      const existing = await Publication.findOne({
+        where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."name"')), body.name.toLowerCase()),
+        include: db.scholars
+      });
+
+      let existingISSN;
+      if (body.ISSN) {
+        existingISSN = await Publication.findOne({
+          where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."ISSN"')), body.ISSN?.toLowerCase()),
+          include: db.scholars
+        });
+      }
+
+      if (existing && existing.id != body.id) {
+        return res.status(400).send({
+          status: false,
+          messages: 'Publikasi dengan judul tersebut sudah terbuat sebelumnya.',
+          results: null
+        })
+      } else if (existingISSN && existingISSN.id != body.id) {
+        return res.status(400).send({
+          status: false,
+          messages: 'Publikasi dengan ISSN tersebut sudah terbuat sebelumnya.',
+          results: null
+        })
+      }
 
       const publicationUpdated = await Publication.update(body, {
         where: {

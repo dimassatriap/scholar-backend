@@ -9,11 +9,11 @@ module.exports = {
     operatorsAliases: false
   },
   test: {
-    username: 'root',
+    username: 'postgres',
     password: null,
-    database: 'scholar_test',
+    database: 'scholar',
     host: '127.0.0.1',
-    dialect: 'mysql',
+    dialect: 'postgres',
     operatorsAliases: false
   },
   production: {

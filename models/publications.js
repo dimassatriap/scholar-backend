@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     publicationEvent: DataTypes.STRING,
     conference: DataTypes.STRING,
     coAuthor: DataTypes.STRING,
-    publishDate: DataTypes.DATE
+    publishDate: DataTypes.DATE,
+    ISSN: DataTypes.STRING
   }, {});
   publications.associate = function(models) {
     // associations can be defined here
