@@ -193,15 +193,7 @@ module.exports = {
     try {
       const id = req.params.id
       const body = {
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-        address: req.body.address,
-        gender: req.body.gender,
-        birthDate: req.body.birthDate,
-        image: req.body.image,
-        accountId: req.body.accountId,
-        departmentId: req.body.departmentId
+        ...req.body
       }
 
       const scholarUpdated = await Scholar.update(body, {

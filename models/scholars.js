@@ -10,6 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       gender: DataTypes.STRING,
       birthDate: DataTypes.DATE,
       image: DataTypes.STRING,
+      frontTitle: DataTypes.STRING,
+      backTitle: DataTypes.STRING,
     },
     {}
   );
