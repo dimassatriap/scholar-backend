@@ -99,15 +99,6 @@ module.exports = {
       const scholar = await Scholar.findByPk(id, {
         include: [
           {
-            model: db.publications,
-            include: [{
-              model: db.keywords,
-              as: 'keywords',
-              attributes: ['id', 'name'],
-              through: { attributes: [] }
-            }]
-          },
-          {
             attributes: ['name'],
             model: db.departments,
             include: [
