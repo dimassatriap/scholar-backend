@@ -90,6 +90,8 @@ module.exports = {
         ]
       }
 
+      if (where[Op.or].length < 1) delete where[Op.or]
+
       const include = [
         {
           model: db.keywords,
