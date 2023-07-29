@@ -8,15 +8,29 @@ const Sequelize = require('sequelize')
 module.exports = {
   async findAll(req, res) {
     try {
-      const where = {}
+      const where = {
+        [Op.or]: []
+      }
       const query = req.query.search
+
       let keywords = req.query.keywords
       if (keywords?.length) {
         keywords = keywords.split(',')
       }
 
+      let firstAuthors = req.query.firstAuthors
+      if (firstAuthors?.length) {
+        firstAuthors = firstAuthors.split(',')
+      }
+
+      let otherAuthors = req.query.otherAuthors
+      if (otherAuthors?.length) {
+        otherAuthors = otherAuthors.split(',')
+      }
+
       if (!!query) {
         where[Op.or] = [
+          ...where[Op.or],
           Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."name"')), {
             [Op.like]: '%' + query.toLowerCase() + '%'
           }),
@@ -30,6 +44,27 @@ module.exports = {
             [Op.like]: '%' + query.toLowerCase() + '%'
           }),
         ]
+      }
+
+      if (!!firstAuthors) {
+        where[Op.or] = [
+          ...where[Op.or],
+          Sequelize.where(Sequelize.col('"scholar"."id"'), {
+            [Op.in]: firstAuthors
+          }),
+        ]
+      }
+
+      if (!!otherAuthors) {
+        for (let i = 0; i < otherAuthors.length; i++) {
+          const author = otherAuthors[i];
+          where[Op.or] = [
+            ...where[Op.or],
+            Sequelize.where(Sequelize.fn('lower', Sequelize.col('"publications"."coAuthor"')), {
+              [Op.like]: '%' + author.toLowerCase() + '%'
+            }),
+          ] 
+        }
       }
 
       let publishYear = req.query.publishYear
