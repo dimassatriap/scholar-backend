@@ -33,11 +33,24 @@ module.exports = {
         })
       }
 
-      const where = {}
+      const where = {
+        [Op.and]: []
+      }
+
       const query = req.query.search
       if (!!query) {
         where[Op.or] = [{ name: { [Op.like]: '%' + query + '%' } }]
       }
+
+      const validated = req.query.validated
+      if (validated != 'all') {
+        where[Op.and] = [
+          ...where[Op.and],
+          { validated: { [Op.ne]: false } }
+        ]
+      }
+
+      if (where[Op.and].length < 1) delete where[Op.and]
 
       const page = Number(req.query?.page || 1);
       const limit = Number(req.query?.itemsPerPage || 12);
@@ -69,8 +82,29 @@ module.exports = {
 
   async findOne(req, res) {
     try {
+      const include = [
+        {
+          attributes: ['name'],
+          model: db.departments,
+          include: [
+            {
+              attributes: ['name'],
+              model: db.faculties,
+              include: [
+                {
+                  attributes: ['name'],
+                  model: db.universities
+                }
+              ]
+            }
+          ]
+        }
+      ]
+
       const id = req.params.id
-      const scholar = await Scholar.findByPk(id)
+      const scholar = await Scholar.findByPk(id, {
+        include
+      })
       if (scholar) {
         res.status(200).send({
           status: true,

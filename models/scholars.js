@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       image: DataTypes.STRING,
       frontTitle: DataTypes.STRING,
       backTitle: DataTypes.STRING,
+      validated: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
+        // defaultValue: false
+      }
     },
     {}
   );

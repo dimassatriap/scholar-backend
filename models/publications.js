@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     totalPages: DataTypes.INTEGER,
     ISBN: DataTypes.INTEGER,
     journal: DataTypes.STRING,
+    journalEdition: DataTypes.STRING,
     publisher: DataTypes.STRING,
     number: DataTypes.STRING,
     publicationEvent: DataTypes.STRING,
@@ -15,7 +16,12 @@ module.exports = (sequelize, DataTypes) => {
     coAuthor: DataTypes.STRING,
     publishDate: DataTypes.DATE,
     ISSN: DataTypes.STRING,
-    link: DataTypes.STRING
+    link: DataTypes.STRING,
+    validated: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
+      // defaultValue: false
+    }
   }, {});
   publications.associate = function(models) {
     // associations can be defined here

@@ -30,6 +30,7 @@ module.exports = {
       }
 
       const publicationType = req.query.publicationType
+      const validated = req.query.validated
 
       if (!!query) {
         where[Op.or] = [
@@ -82,6 +83,15 @@ module.exports = {
           ...where[Op.and],
           Sequelize.where(Sequelize.col('"publications"."journal"'), {
             [Op.ne]: null
+          }),
+        ]
+      }
+
+      if (validated != 'all') {
+        where[Op.and] = [
+          ...where[Op.and],
+          Sequelize.where(Sequelize.col('"publications"."validated"'), {
+            [Op.ne]: false
           }),
         ]
       }
