@@ -29,6 +29,8 @@ module.exports = {
         otherAuthors = otherAuthors.split(',')
       }
 
+      const publicationType = req.query.publicationType
+
       if (!!query) {
         where[Op.or] = [
           ...where[Op.or],
@@ -66,6 +68,22 @@ module.exports = {
             }),
           ] 
         }
+      }
+
+      if (publicationType == 'conference') {
+        where[Op.and] = [
+          ...where[Op.and],
+          Sequelize.where(Sequelize.col('"publications"."conference"'), {
+            [Op.ne]: null
+          }),
+        ]
+      } else if (publicationType == 'journal') {
+        where[Op.and] = [
+          ...where[Op.and],
+          Sequelize.where(Sequelize.col('"publications"."journal"'), {
+            [Op.ne]: null
+          }),
+        ]
       }
 
       let publishYear = req.query.publishYear
