@@ -9,7 +9,8 @@ module.exports = {
   async findAll(req, res) {
     try {
       const where = {
-        [Op.or]: []
+        [Op.or]: [],
+        [Op.and]: []
       }
       const query = req.query.search
 
@@ -47,8 +48,8 @@ module.exports = {
       }
 
       if (!!firstAuthors) {
-        where[Op.or] = [
-          ...where[Op.or],
+        where[Op.and] = [
+          ...where[Op.and],
           Sequelize.where(Sequelize.col('"scholar"."id"'), {
             [Op.in]: firstAuthors
           }),
@@ -73,6 +74,7 @@ module.exports = {
       }
       if (publishYear) {
         where[Op.and] = [
+          ...where[Op.and],
           ...( process.env.NODE_ENV == 'development' 
             ? [
               // MySQL
@@ -91,6 +93,7 @@ module.exports = {
       }
 
       if (where[Op.or].length < 1) delete where[Op.or]
+      if (where[Op.and].length < 1) delete where[Op.and]
 
       const include = [
         {
