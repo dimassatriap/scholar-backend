@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       backTitle: DataTypes.STRING,
       validated: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true
-        // defaultValue: false
+        defaultValue: false
       }
     },
     {}

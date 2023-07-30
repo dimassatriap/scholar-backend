@@ -19,8 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     link: DataTypes.STRING,
     validated: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true
-      // defaultValue: false
+      defaultValue: false
     }
   }, {});
   publications.associate = function(models) {
