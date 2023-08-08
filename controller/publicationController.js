@@ -29,6 +29,11 @@ module.exports = {
         otherAuthors = otherAuthors.split(',')
       }
 
+      let departmentIds = req.query.departmentIds
+      if (departmentIds?.length) {
+        departmentIds = departmentIds.split(',')
+      }
+
       const publicationType = req.query.publicationType
       const validated = req.query.validated
 
@@ -69,6 +74,15 @@ module.exports = {
             }),
           ] 
         }
+      }
+
+      if (!!departmentIds) {
+        where[Op.and] = [
+          ...where[Op.and],
+          Sequelize.where(Sequelize.col('"scholar"."departmentId"'), {
+            [Op.in]: departmentIds
+          }),
+        ]
       }
 
       if (publicationType == 'conference') {
