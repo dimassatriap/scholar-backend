@@ -3,7 +3,7 @@ const Scholar = db.scholars
 const Account = db.accounts
 const { Op } = require('sequelize')
 const paginate = require('../utils/paginate');
-
+const Sequelize = require('sequelize')
 
 module.exports = {
   async findAll(req, res) {
@@ -39,7 +39,11 @@ module.exports = {
 
       const query = req.query.search
       if (!!query) {
-        where[Op.or] = [{ name: { [Op.like]: '%' + query + '%' } }]
+        where[Op.or] = [
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('"scholars"."name"')), {
+            [Op.like]: '%' + query.toLowerCase() + '%'
+          })
+        ]
       }
 
       const validated = req.query.validated
