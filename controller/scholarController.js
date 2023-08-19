@@ -10,7 +10,7 @@ module.exports = {
     try {
       const include = [
         {
-          attributes: ['name'],
+          attributes: ['name', 'facultyId'],
           model: db.departments,
           include: [
             {
@@ -51,6 +51,20 @@ module.exports = {
         where[Op.and] = [
           ...where[Op.and],
           { validated: { [Op.ne]: false } }
+        ]
+      }
+
+      let facultyIds = req.query.facultyIds
+      if (facultyIds?.length) {
+        facultyIds = facultyIds.split(',')
+      }
+      
+      if (!!facultyIds) {
+        where[Op.and] = [
+          ...where[Op.and],
+          Sequelize.where(Sequelize.col('"department"."facultyId"'), {
+            [Op.in]: facultyIds
+          }),
         ]
       }
 
