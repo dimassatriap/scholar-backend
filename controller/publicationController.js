@@ -34,6 +34,11 @@ module.exports = {
         departmentIds = departmentIds.split(',')
       }
 
+      let facultyIds = req.query.facultyIds
+      if (facultyIds?.length) {
+        facultyIds = facultyIds.split(',')
+      }
+
       const publicationType = req.query.publicationType
       const validated = req.query.validated
 
@@ -81,6 +86,15 @@ module.exports = {
           ...where[Op.and],
           Sequelize.where(Sequelize.col('"scholar"."departmentId"'), {
             [Op.in]: departmentIds
+          }),
+        ]
+      }
+
+      if (!!facultyIds) {
+        where[Op.and] = [
+          ...where[Op.and],
+          Sequelize.where(Sequelize.col('"scholar"."department"."facultyId"'), {
+            [Op.in]: facultyIds
           }),
         ]
       }
@@ -158,7 +172,12 @@ module.exports = {
       if (!!withScholars) {
         include.push({
           model: db.scholars,
-          as: 'scholar'
+          as: 'scholar',
+          include: [
+            {
+              model: db.departments,
+            }
+          ]
         })
       }
 

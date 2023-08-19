@@ -1,10 +1,33 @@
 const db = require('../models')
 const Department = db.departments
+const { Op } = require('sequelize')
+const Sequelize = require('sequelize')
 
 module.exports = {
   async findAll(req, res) {
     try {
+      let facultyIds = req.query.facultyIds
+      if (facultyIds?.length) {
+        facultyIds = facultyIds.split(',')
+      }
+
+      const where = {
+        [Op.and]: []
+      }
+
+      if (!!facultyIds) {
+        where[Op.and] = [
+          ...where[Op.and],
+          Sequelize.where(Sequelize.col('"facultyId"'), {
+            [Op.in]: facultyIds
+          }),
+        ]
+      }
+
+      if (where[Op.and].length < 1) delete where[Op.and]
+
       const departments = await Department.findAll({
+        where,
         include: [
           {
             attributes: ['id', 'name'],
