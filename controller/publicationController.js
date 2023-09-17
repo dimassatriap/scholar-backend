@@ -57,6 +57,9 @@ module.exports = {
           Sequelize.where(Sequelize.fn('lower', Sequelize.col('"scholar"."name"')), {
             [Op.like]: '%' + query.toLowerCase() + '%'
           }),
+          Sequelize.where(Sequelize.fn('lower', Sequelize.col('"keywords"."name"')), {
+            [Op.like]: '%' + query.toLowerCase() + '%'
+          }),
         ]
       }
 
